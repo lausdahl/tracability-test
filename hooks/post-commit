@@ -4,7 +4,6 @@
 # dumb transports.
 #
 # To enable this hook, rename this file to "post-update".
-echo `pwd`
 #exec git update-server-info
 
 #echo The commit just made now has SHA1: `git rev-parse HEAD`
