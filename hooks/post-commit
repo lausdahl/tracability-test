@@ -31,13 +31,13 @@ url=`echo $url | sed s+:+/+` #"$(url/:/\/)" #`sed s|:|\/g <<< $url`
 url=${url%.*}
 
 #echo $url
-action="unknown"
-uri=
+#action="unknown"
+#uri=
 #echo $jobs
 
 while read -r a b; do
 		# echo $a -- $b
-#		action="unknown"
+		action="unknown"
 		if [ "$a" = 'M' ];
 		then
 				action="Modified"
@@ -55,11 +55,13 @@ while read -r a b; do
 		
 
 		
-done <<<  "$jobs"
 
 
-
-
+echo ---------------------------------------------------------------------
+echo
+echo		OSLC Entry
+echo
+echo ---------------------------------------------------------------------
 
 
 
@@ -90,3 +92,7 @@ T=$(echo $T | sed -e "s!CONTENT!$content!g")
 T=$(echo $T | sed -e "s!USER!$user!g")
 
 echo $T | python -m json.tool
+echo
+echo
+
+done <<<  "$jobs"
