@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-update".
+
+#exec git update-server-info
+
+#echo The commit just made now has SHA1: `git rev-parse HEAD`
+#echo Fetching data for tracability
+
+#git show --pretty="format: %H" --name-status
+
+jobs=`git show --pretty="format:" --name-status`
+sha1=`git rev-parse HEAD`
+#url="http://some-remote-origin-not-set"
+
+url=`git config --get remote.origin.url`
+
+#git@github.com:lausdahl/tracability-test.git
+
+if [[ $url == "git@"* ]]
+then
+
+    url=$(echo $url| cut -c5-)
+		
+fi
+
+url=`echo $url | sed s+:+/+` #"$(url/:/\/)" #`sed s|:|\/g <<< $url`
+url=${url%.*}
+
+#echo $url
+
+#echo $jobs
+
+while read -r a b; do
+		# echo $a -- $b
+		action="unknown"
+		if [ "$a" = 'M' ];
+		then
+				action="Modified"
+		fi
+		if [ "$a" = 'A' ];
+		then
+				action="added"
+		fi
+		if [ "$a" = 'D' ];
+		then
+				action="deleted"
+		fi
+
+		echo "{\"action\":\"$action\", \"uri\":\"$url/commit/$sha1/$b\" }"
+		
+
+		
+done <<<  "$jobs"
