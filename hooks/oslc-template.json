@@ -1,0 +1,16 @@
+{  
+   "prefixes" : {
+      "oslc": "http://open-services.net/ns/core#",
+      "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "foaf" : "http://http://xmlns.com/foaf/0.1/",
+      "dcterms" : "http://purl.org/dc/terms/"
+   },
+   "rdf:type" : [ { "rdf:resource" : "http://open-services.net/ns/bogus/blogs#TYPE" } ],
+   "rdf:about" : "ABOUT",
+   "dcterms:title" : "TITLE",
+   "dcterms:modified" : "DATE_MODIFIED",
+   "dcterms:content" : "CONTENT",
+   "dcterms:creator" : {
+      "foaf:name" : "USER"
+   }
+}
