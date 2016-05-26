@@ -4,7 +4,7 @@
 # dumb transports.
 #
 # To enable this hook, rename this file to "post-update".
-
+echo `pwd`
 #exec git update-server-info
 
 #echo The commit just made now has SHA1: `git rev-parse HEAD`
@@ -31,12 +31,13 @@ url=`echo $url | sed s+:+/+` #"$(url/:/\/)" #`sed s|:|\/g <<< $url`
 url=${url%.*}
 
 #echo $url
-
+action="unknown"
+uri=
 #echo $jobs
 
 while read -r a b; do
 		# echo $a -- $b
-		action="unknown"
+#		action="unknown"
 		if [ "$a" = 'M' ];
 		then
 				action="Modified"
@@ -49,9 +50,43 @@ while read -r a b; do
 		then
 				action="deleted"
 		fi
-
-		echo "{\"action\":\"$action\", \"uri\":\"$url/commit/$sha1/$b\" }"
+		uri=$url/commit/$sha1/$b
+#		echo "{\"action\":\"$action\", \"uri\":\"$url/commit/$sha1/$b\" }"
 		
 
 		
 done <<<  "$jobs"
+
+
+
+
+
+
+
+
+TEMPLATE=`cat .git/hooks/oslc-template.json`
+
+# NAME
+name=
+#TYPE
+type=not-sure-what-this-is
+# ABOUT  aka URI
+about=$uri
+#TITLE
+title=$action
+#DATE_MODIFIED
+dateModified=`git log -1 --format=%cd HEAD`
+#CONTENT
+content=`git log -1 --pretty=%B`
+#USER
+user=`git --no-pager show -s --format='%an <%ae>' HEAD`
+
+T=$(echo $TEMPLATE | sed -e "s!NAME!$name!g")
+T=$(echo $T | sed -e "s!TYPE!$type!g")
+T=$(echo $T | sed -e "s!ABOUT!$about!g")
+T=$(echo $T | sed -e "s!TITLE!$title!g")
+T=$(echo $T | sed -e "s!DATE_MODIFIED!$dateModified!g")
+T=$(echo $T | sed -e "s!CONTENT!$content!g")
+T=$(echo $T | sed -e "s!USER!$user!g")
+
+echo $T | python -m json.tool
