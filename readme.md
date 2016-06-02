@@ -1,5 +1,4 @@
 
-
 This is a small tracability test
 
 It uses git to issue OSLC commands, that are split into:
