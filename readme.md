@@ -1,3 +1,4 @@
+# Tracability test
 
 This is a small tracability test
 
@@ -62,3 +63,10 @@ it required *nix bash + python any version
 The idea is to implement a submodule expander with file lines + a diff tool for the model (Overture).
 
 This will make it possible to detect what part of the model changed and use the commit message for OSLC so no user input will be needed. Only requirement is that the model parses. 
+
+# Links
+
+- http://open-services.net/bin/view/Main/OSLCCoreSpecJSONExamples
+- http://open-services.net/bin/view/Main/OSLCCoreSpecTurtleExamples
+- http://open-services.net/bin/view/Main/OSLCCoreSpecRDFXMLExamples
+- http://open-services.net/bin/view/Main/OSLCCoreSpecAppendixRepresentations
