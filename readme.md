@@ -70,3 +70,137 @@ This will make it possible to detect what part of the model changed and use the 
 - http://open-services.net/bin/view/Main/OSLCCoreSpecTurtleExamples
 - http://open-services.net/bin/view/Main/OSLCCoreSpecRDFXMLExamples
 - http://open-services.net/bin/view/Main/OSLCCoreSpecAppendixRepresentations
+
+
+# new JSON
+
+* base nessage
+```json
+{
+    "rdf:RDF": {
+        "xmlns:rdf": "http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#",
+        "xmlns:prov": "http:\/\/www.w3.org\/ns\/prov#",
+        "messageFormatVersion": "0.1"
+    }
+}
+```
+
+* an agent
+```json
+{
+    "prov:Agent": [
+        {
+            "rdf:about": "Agent:My git user",
+            "name": "My git user"
+        }
+    ]
+}
+```
+
+* a tool
+```json
+{
+    "prov:Entity": {
+        "rdf:about": "Entity.softwareTool:Overture:2.4.0",
+        "version": "2.4.0",
+        "type": "softwareTool",
+        "name": "Overture"
+    }
+}
+```
+
+* a source file
+```json
+{
+    "prov:Entity": [
+        {
+            "rdf:about": "Entity.file:<git-hash>\/path\/to\/file.txt",
+            "path": "path\/to\/file.txt",
+            "hash": "213123435234",
+            "type": "file"
+        },
+        {
+            "rdf:about": "Entity.file:<git-hash>\/path\/to\/file.txt:classA",
+            "path": "path\/to\/file.txt",
+            "type": "definition"
+        }
+    ]
+}
+```
+
+* a source file with internal members
+```json
+{
+    "prov:Entity": [
+        {
+            "rdf:about": "Entity.file:<git-hash>\/path\/to\/file.txt",
+            "path": "path\/to\/file.txt",
+            "hash": "213123435234",
+            "type": "file",
+            "prov:hadMember": {
+                "prov:Entity": [
+                    {
+                        "rdf:about": "Entity.file:<git-hash>\/path\/to\/file.txt:classA"
+                    }
+                ]
+            }
+        },
+        {
+            "rdf:about": "Entity.file:<git-hash>\/path\/to\/file.txt:classA",
+            "path": "path\/to\/file.txt",
+            "type": "definition"
+        }
+    ]
+}
+```
+
+
+* new version of file `^1` means previous version
+```json
+{
+    "prov:Entity": [
+        {
+            "rdf:about": "Entity.file:<git-hash>\/path\/to\/file.txt",
+            "path": "path\/to\/file.txt",
+            "hash": "213123435234",
+            "type": "file",
+            "prov:wasDerivedFrom": {
+                "prov:Entity": [
+                    {
+                        "rdf:about": "Entity.file:<git-hash^1>\/path\/to\/file.txt"
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
+
+
+
+# Git commands
+
+* `git rev-list master` get list of SHA1 commit ids since the begining newest first
+* `git show --pretty="format: %H" --name-status $commit` get changes in the commit per file
+
+```bash
+39ddeb02323d0d4f7f7baaedabe941db80c94d10
+A       .gitignore
+A       back-up-hooks.sh
+A       hooks/post-commit
+```
+
+* `git rev-parse HEAD` current SHA1
+* `git config --get remote.origin.url` remote url like: `git@github.com:lausdahl/tracability-test.git`
+* `git config user.name` get user name
+* `git config user.email` get user email
+* `git log -1 --format=%cd HEAD` get datetime of commit
+* `git log -1 --pretty=%B HEAD` get commit message
+* `git --no-pager show -s --format='%an <%ae>' HEAD` get username and email of commit
+
+
+# pandoc
+
+```bash
+cat README.md | pandoc -f markdown_github | browser
+```
